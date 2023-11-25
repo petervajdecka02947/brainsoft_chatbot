@@ -8,10 +8,11 @@ To use this CLI tool, follow these simple steps:
 
 1. **Clone the Repository:**
    ```bash
-   git clone [Your Repository URL]
+   git clone https://github.com/petervajdecka02947/brainsoft_chatbot.git
 
 2. **Set backend endpoint in the .env:**
     - Use `localhost` if you are running locally.
+    OR
     - Use the static or public IP address of your external server (for example, an EC2 instance in AWS) if running on a server.
 
 3. **In root, first install docker and docker-compose and then build run your docker containers orchestrated by docker-compose.yaml file:**
