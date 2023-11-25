@@ -1,0 +1,8 @@
+[theme]
+primaryColor = "#FFA500"  # Orange color for buttons and active elements.
+backgroundColor = "#FFFFFF"  # White background for the main content area.
+secondaryBackgroundColor = "#D3D3D3"  # Very light anthracite for the sidebar.
+textColor = "#000000"  # Black text color for good contrast on the white background.
+secondaryTextColor = "#000000"  # Black text color for good contrast on the light gray background.
+font = "sans serif"
+

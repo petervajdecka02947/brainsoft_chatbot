@@ -1,0 +1,5 @@
+streamlit==1.28.2
+streamlit-chat==0.1.1
+pymongo
+python-dotenv
+PyPDF2
