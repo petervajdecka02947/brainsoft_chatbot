@@ -2,7 +2,7 @@
 This generative chatbot repository was created for Python AI Code Challenge at BrainSoft
 ## Access to this work:
 - this work has been done and tested in linux (ubuntu) enviroment
-- you can directly try this demo on my domain **vajpet.com**
+- you can directly try this demo on my domain [**vajpet.com**](http://vajpet.com)
 - run `docker-compose up -d` to create package that can be access at you `localhost`
 - or just run it my separately using **entry.sh** (packages from reuirements.txt must be installed previously) from  folders backend, frontend, etc
 ### Demo
@@ -52,5 +52,5 @@ The script will display the installed versions of Docker and Docker Compose upon
       1. we can run it in root:
          ```bash
          pytest
-         
+
       2. after docker-compose up is executed, the tests for backend are run automatically as prerequsities for vuilding of backend (see entry.sh in backend folder) 
