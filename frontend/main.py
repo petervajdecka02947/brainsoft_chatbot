@@ -62,52 +62,54 @@ if st.session_state.token_valid:
 
             # Input field for new message
             if prompt := st.chat_input("Write input to chatbot"):
+                st.session_state.prompt  = prompt
                 st.session_state.full_response = handle_other_files(
-                    prompt, st.session_state.text_data, ENDPOINT
+                 ENDPOINT
                 )
                 st.session_state.parsed_message = parse_response(
                     st.session_state.full_response
                 )
                 try:
                     chat_m(
-                        st.session_state.parsed_message,
-                        is_user=False,
-                        avatar_style="thumbs",
-                        allow_html=True,
-                    )
-                    # Append the response to the session state
+                                   st.session_state.full_response,
+                                   is_user=False,
+                                   avatar_style="thumbs",
+                                   allow_html=True,
+                               )
+                               # Append the response to the session state
                     st.session_state.messages.append(
-                        {
-                            "id": "",
-                            "role": "assistant",
-                            "content": st.session_state.parsed_message,
-                        }
-                    )
+                                   {
+                                       "id": "",
+                                       "role": "assistant",
+                                       "content": st.session_state.full_response,
+                                   }
+                               )
                     save_chat_history(
-                        str(st.session_state.session_id),
-                        [[prompt, st.session_state.parsed_message]],
-                        ENDPOINT,
-                    )
+                                   str(st.session_state.session_id),
+                                   [[st.session_state.prompt, st.session_state.full_response]],
+                                   ENDPOINT,
+                               )
+                    
                 except:
-                    chat_m(
-                        st.session_state.full_response,
-                        is_user=False,
-                        avatar_style="thumbs",
-                        allow_html=True,
-                    )
-                    # Append the response to the session state
-                    st.session_state.messages.append(
-                        {
-                            "id": "",
-                            "role": "assistant",
-                            "content": st.session_state.full_response,
-                        }
-                    )
-                    save_chat_history(
-                        str(st.session_state.session_id),
-                        [[prompt, st.session_state.full_response]],
-                        ENDPOINT,
-                    )
+                          chat_m(
+                              st.session_state.parsed_message,
+                              is_user=False,
+                              avatar_style="thumbs",
+                              allow_html=True,
+                          )
+                          # Append the response to the session state
+                          st.session_state.messages.append(
+                              {
+                                  "id": "",
+                                  "role": "assistant",
+                                  "content": st.session_state.parsed_message,
+                              }
+                          )
+                          save_chat_history(
+                              str(st.session_state.session_id),
+                              [[st.session_state.prompt, st.session_state.parsed_message]],
+                              ENDPOINT,
+                          )
 
     if selected_option == "IBM Generative SDK":
         # Reset conversation button
@@ -118,15 +120,12 @@ if st.session_state.token_valid:
         display_messages(st.session_state)
 
         if prompt := st.chat_input("Write input to chatbot"):
-            st.session_state.full_response = handle_ibm_sdk(
-                prompt, ENDPOINT, st.session_state
+            st.session_state.prompt  = prompt
+            st.session_state.full_response, st.session_state.source = handle_ibm_sdk(
+                #st.session_state.prompt, 
+                ENDPOINT, 
+                #st.session_state
             )
-            try:
-                st.session_state.source = "\n\nSource: {}".format(
-                    get_source(st.session_state.full_response, ENDPOINT)
-                )
-            except:
-                st.session_state.source = None
             st.session_state.parsed_message = parse_response(
                 st.session_state.full_response
             )
@@ -148,7 +147,7 @@ if st.session_state.token_valid:
                 )
                 save_chat_history(
                     str(st.session_state.session_id),
-                    [[prompt, st.session_state.parsed_message]],
+                    [[st.session_state.prompt, st.session_state.parsed_message]],
                     ENDPOINT,
                 )
             except:
@@ -170,6 +169,6 @@ if st.session_state.token_valid:
                 )
                 save_chat_history(
                     str(st.session_state.session_id),
-                    [[prompt, st.session_state.full_response]],
+                    [[st.session_state.prompt, st.session_state.full_response]],
                     ENDPOINT,
                 )

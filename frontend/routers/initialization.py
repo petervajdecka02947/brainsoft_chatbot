@@ -34,6 +34,7 @@ def initialize_session_state(selected_option: str, session_state: dict):
         "text_data": "",
         "chat_index": 0,
         "source": "",
+        "history":""
     }
 
     for key, value in default_values.items():

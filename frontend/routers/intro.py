@@ -90,7 +90,7 @@ def display_sources_info():
                 - **Conversation Memory**: The chatbot remembers the entire conversation history, enhancing the context and relevance of its responses.
                 - **Source Flexibility**: Independent of your source choice, the chatbot streams answers efficiently and accurately.
                 - **Advanced Embeddings**: Uses 'text-embedding-ada-002' embeddings from OpenAI for nuanced understanding and information retireval.
-                - **Transparency in Responses**: For each response, the chatbot cites the source, ensuring clarity and trust.
+                - **Transparency in Responses**: `At this version, the chatbot cites the source related to current question not chat history, ensuring clarity and trust.`
                 - **Reset Option**: A 'Reset Conversation' feature allows you to start afresh anytime, storing each session independently in MongoDB.
                 - **Web Lookups**: When using the 'IBM Generative SDK' source, the chatbot can perform specific web searches for additional information.
                 """

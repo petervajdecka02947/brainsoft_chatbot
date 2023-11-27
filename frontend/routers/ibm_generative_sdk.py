@@ -4,9 +4,10 @@ from routers.common import parse_prompt_code, set_history_prompt
 from streamlit_chat import message as chat_m
 import streamlit as st
 from utils.chat_history_api_client import get_chat_history
+from utils.retrieve_function import get_source
 
 
-def handle_ibm_sdk(prompt, end_point, session_state):
+def handle_ibm_sdk(end_point):
     """
     Handles the interaction with the IBM SDK for processing user prompts in a Streamlit app.
 
@@ -20,16 +21,17 @@ def handle_ibm_sdk(prompt, end_point, session_state):
 
     This function appends the user's prompt to the session state, fetches chat history, and sends the prompt to the IBM SDK service. It then streams and displays the response.
     """
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    chat_m(prompt, is_user=True, avatar_style="big-smile")
+    st.session_state.messages.append({"role": "user", "content": st.session_state.prompt})
+    chat_m(st.session_state.prompt, is_user=True, avatar_style="big-smile")
 
     try:
-        history = get_chat_history(session_state.session_id, end_point)["chat_history"]
+        st.session_state.history = get_chat_history(st.session_state.session_id, end_point)["chat_history"]
     except:
-        history = []
+        st.session_state.history = []
 
-    prompt_history = set_history_prompt(prompt, history, level=1)
-    prompt_parsed = parse_prompt_code(prompt_history)
+    st.session_state.prompt_history = set_history_prompt(st.session_state.prompt, st.session_state.history, level=1)
+    st.session_state.prompt_parsed = parse_prompt_code(st.session_state.prompt_history)
+    
 
     with st.spinner("Generating..."):
         message_placeholder = st.empty()
@@ -38,7 +40,7 @@ def handle_ibm_sdk(prompt, end_point, session_state):
             with requests.get(
                 "http://{}/chat".format(end_point),
                 stream=True,
-                json={"text": prompt_parsed},
+                json={"text": st.session_state.prompt_parsed},
                 timeout=60,
             ) as r:
                 r.raise_for_status()
@@ -56,11 +58,12 @@ def handle_ibm_sdk(prompt, end_point, session_state):
             print(f"Chunked Encoding Error occurred: {e}")
         except requests.exceptions.RequestException as e:
             print(f"Request failed: {e}")
-        except DuplicateWidgetID as e:
-            message_placeholder.markdown("")
-            return "You already asked this, rephrase your question!"
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
         finally:
+            st.session_state.source = "\n\nSource: {}".format(
+                get_source(st.session_state.prompt+st.session_state.full_response, end_point)
+                )
+            
             message_placeholder.markdown("")
-            return st.session_state.full_response
+            return st.session_state.full_response, st.session_state.source

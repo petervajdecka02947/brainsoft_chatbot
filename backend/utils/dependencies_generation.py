@@ -114,7 +114,7 @@ def setup_conversational_chain(settings: object):
     try:
         retriever = vectordb.as_retriever(
             search_type="similarity_score_threshold",
-            search_kwargs={"score_threshold": 0.2, "k": 1},
+            search_kwargs={"score_threshold": 0.1, "k": 1},
         )
     except Exception as e:
         raise UpdateError(f"Error during initialization of retriever: {e}", 403)
@@ -210,16 +210,16 @@ async def get_source(retriever_obj: object, query: str):
     try:
         docs = await retriever_obj.aget_relevant_documents(query)
     except Exception as e:
-        return "DuckDuckGo"
+        return "Not retrieved"
     if docs == []:
-        return "DuckDuckGo"
+        return "Not retrieved"
     else:
         try:
             doc_source = docs[0].metadata["source"]
         except Exception as e:
-            return "DuckDuckGo"
+            return "Not retrieved"
 
-        if "ibm" in doc_source.lower():
-            return doc_source
+        if ("pradyunsg" in doc_source.lower()) or ("sphinx" in  doc_source.lower()):
+            return "Not retrieved"
         else:
-            return "No ibm related source found"
+            return doc_source

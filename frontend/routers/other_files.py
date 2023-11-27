@@ -34,7 +34,7 @@ def upload_f(uploaded_file):
         return uploaded_file.read().decode("utf-8")
 
 
-def handle_other_files(prompt, text_data, end_point):
+def handle_other_files(end_point):
     """
     Handles the processing of user prompts and additional text data using an external service.
 
@@ -48,16 +48,16 @@ def handle_other_files(prompt, text_data, end_point):
 
     This function sends the user's prompt and the additional text data to the specified endpoint. It streams and displays the response in the Streamlit app.
     """
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    chat_m(prompt, is_user=True, avatar_style="big-smile")
+    st.session_state.messages.append({"role": "user", "content": st.session_state.prompt})
+    chat_m(st.session_state.prompt, is_user=True, avatar_style="big-smile")
     try:
         history = get_chat_history(st.session_state.session_id, end_point)[
             "chat_history"
         ]
     except:
         history = []
-    prompt_history = set_history_prompt(prompt, history, level=1)
-    prompt_parsed = parse_prompt_code(prompt_history)
+    st.session_state.prompt_history = set_history_prompt(st.session_state.prompt, history, level=1)
+    st.session_state.prompt_parsed = parse_prompt_code(st.session_state.prompt_history)
     with st.spinner("Generating..."):
         message_placeholder = st.empty()
         st.session_state.full_response = ""
@@ -65,7 +65,7 @@ def handle_other_files(prompt, text_data, end_point):
             with requests.get(
                 "http://{}/llm_chat".format(end_point),
                 stream=True,
-                params={"query": prompt_parsed, "context": text_data},
+                params={"query": st.session_state.prompt_parsed, "context": st.session_state.text_data},
                 timeout=60,
             ) as r:
                 r.raise_for_status()

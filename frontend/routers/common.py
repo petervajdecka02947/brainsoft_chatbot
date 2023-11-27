@@ -58,7 +58,10 @@ def parse_prompt_code(input_prompt):
     return (
         """Whenever I ask a question that requires a Python script for the answer,"""
         """please format your response by beginning and ending the Python code with triple tildes (~~~). """
-        """This formatting should be used consistently for all Python code responses. {}""".format(
+        """This formatting should be used consistently for all Python code responses. Whenever you are requested""" 
+        """to provide a Python script by prompt "output python", "provide python", etc, always output the complete script """
+        """directly in the response instead of referring to external links, regardless of its"""
+        """length. If there is only question in sense of outputing python script such as "output python", focus on your last response in your chat history. {}""".format(
             input_prompt
         )
     )
@@ -105,7 +108,7 @@ def on_select_change():
     reset_conversation(selected_option, st.session_state)
 
 
-def set_history_prompt(query, history, level=2):
+def set_history_prompt(query, history, level=1):
     """
     Formats a prompt that includes the chat history and the current query.
     It generates a prompt string that combines the recent chat history with a new query for the conversational agent.
